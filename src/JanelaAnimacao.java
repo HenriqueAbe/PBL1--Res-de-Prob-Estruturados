@@ -7,24 +7,27 @@ import java.util.Arrays;
 public class JanelaAnimacao extends JPanel {
     private File[] frames;
     private int frameAtual = 0;
-    private Timer timer;
 
     public JanelaAnimacao(String pastaFrames) {
         File pasta = new File(pastaFrames);
         frames = pasta.listFiles((dir, name) -> name.endsWith(".png"));
-        if (frames != null) Arrays.sort(frames); // Garante a ordem numérica
 
-        // Timer para criar a animação na tela
-        timer = new Timer(50, e -> {
-            if (frames != null && frameAtual < frames.length - 1) {
-                frameAtual++;
-                repaint();
-            } else {
-                ((Timer)e.getSource()).stop();
-                System.out.println("Fim da animação!");
-            }
-        });
-        timer.start();
+        if (frames != null && frames.length > 0) {
+            Arrays.sort(frames);
+
+            Timer timer = new Timer(50, e -> {
+                if (frameAtual < frames.length - 1) {
+                    frameAtual++;
+                    repaint();
+                } else {
+                    ((Timer) e.getSource()).stop();
+                    System.out.println("Animação finalizada.");
+                }
+            });
+            timer.start();
+        } else {
+            System.out.println("Erro: Nenhum frame encontrado em: " + pastaFrames);
+        }
     }
 
     @Override
